@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BhavisProducts.Data_Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +11,5 @@ namespace BhavisProducts
         public int ProductId { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
-
-        public ICollection<CustomerProduct> CustomerProducts { get; set; }
     }
 }
