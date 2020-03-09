@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BhavisProducts;
+using BhavisProducts.Data_Models;
 
 namespace BhavisProducts.Controllers
 {
@@ -31,7 +32,8 @@ namespace BhavisProducts.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _context.Customers.Include(c => c.Orders).ThenInclude(pio => pio.ProductInOrders).FirstOrDefaultAsync(c => c.CustomerId == id);
+
 
             if (customer == null)
             {

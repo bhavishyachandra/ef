@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BhavisProducts.Migrations
 {
     [DbContext(typeof(CustomerContext))]
-    [Migration("20200309215409_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200309234026_FourthAttempt")]
+    partial class FourthAttempt
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,28 +36,49 @@ namespace BhavisProducts.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("BhavisProducts.CustomerProduct", b =>
+            modelBuilder.Entity("BhavisProducts.Data_Models.Order", b =>
                 {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("BhavisProducts.Data_Models.ProductInOrder", b =>
+                {
+                    b.Property<int>("ProductInOrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AdjustedPrice")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Paid")
-                        .HasColumnType("bit");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("CustomerId", "ProductId");
+                    b.HasKey("ProductInOrderId");
+
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CustomerProducts");
+                    b.ToTable("ProductInOrders");
                 });
 
             modelBuilder.Entity("BhavisProducts.Product", b =>
@@ -78,16 +99,23 @@ namespace BhavisProducts.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("BhavisProducts.CustomerProduct", b =>
+            modelBuilder.Entity("BhavisProducts.Data_Models.Order", b =>
                 {
-                    b.HasOne("BhavisProducts.Customer", "Customer")
-                        .WithMany("CustomerProducts")
+                    b.HasOne("BhavisProducts.Customer", null)
+                        .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("BhavisProducts.Data_Models.ProductInOrder", b =>
+                {
+                    b.HasOne("BhavisProducts.Data_Models.Order", null)
+                        .WithMany("ProductInOrders")
+                        .HasForeignKey("OrderId");
 
                     b.HasOne("BhavisProducts.Product", "Product")
-                        .WithMany("CustomerProducts")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

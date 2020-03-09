@@ -99,7 +99,7 @@ namespace BhavisProducts.Migrations
 
             modelBuilder.Entity("BhavisProducts.Data_Models.Order", b =>
                 {
-                    b.HasOne("BhavisProducts.Customer", "Customer")
+                    b.HasOne("BhavisProducts.Customer", null)
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
